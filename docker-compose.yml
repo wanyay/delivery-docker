@@ -1,0 +1,55 @@
+version: "3.3"
+
+networks:
+  backend:
+    driver: ${NETWORKS_DRIVER}
+
+services:
+  api:
+    image: delivery/api
+    build:
+      context: .
+      dockerfile: ./docker/api/Dockerfile
+    ports:
+      - "4500:8080"
+    volumes:
+      - ./api/:/app
+    networks:
+      - backend
+
+  admin:
+    image: delivery/admin
+    build:
+      context: .
+      dockerfile: ./docker/admin/Dockerfile
+    ports:
+      - "4000:8081"
+    volumes:
+      - ./admin/:/app
+    networks:
+      - backend
+
+  mysql:
+    image: mysql:5.7
+    environment:
+      - MYSQL_DATABASE=delivery
+      - MYSQL_USER=delivery
+      - MYSQL_PASSWORD=delivery
+      - MYSQL_ROOT_PASSWORD=root
+    networks:
+      - backend
+    volumes:
+      - ./mysql-data:/var/lib/mysql
+    ports:
+      - 33060:3306
+    networks:
+      - backend
+  
+  adminer:
+    image: adminer:latest
+    environment:
+      - ADMINER_DESIGN=ng9
+    networks:
+      - backend
+    ports:
+      - 4001:8080

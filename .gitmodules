@@ -1,0 +1,6 @@
+[submodule "api"]
+	path = api
+	url = https://github.com/lynnmyatminn/noderest.git
+[submodule "admin"]
+	path = admin
+	url = https://github.com/lynnmyatminn/react-crud.git
